@@ -16,3 +16,8 @@ Customize "Chapter 8 Particle Effect" so that it can be used with pixijs.
 
 **PIXI.DisplayObject, destroy()**  
 [https://pixijs.download/dev/docs/PIXI.DisplayObject.html#destroy](https://pixijs.download/dev/docs/PIXI.DisplayObject.html#destroy)  
+
+**PIXI.BLEND_MODES**  
+[https://pixijs.download/dev/docs/PIXI.html#.BLEND_MODES](https://pixijs.download/dev/docs/PIXI.html#.BLEND_MODES)  
+>IMPORTANT - The WebGL renderer only supports the NORMAL, ADD, MULTIPLY and SCREEN blend modes.  
+>Anything else will silently act like NORMAL.  
