@@ -22,7 +22,8 @@ const fpsDelta = 60 / APP_FPS;
 
 let elapsedTime = 0;
 let bg;
-let obj;
+let obj_skyblue, obj_blue, obj_darkblue;
+let colorAry = ["skyblue", "blue", "darkblue"];
 let particles = []; // 複数
 let particle; // 単体
 let particlesEmitflag = true; // 生成済みフラグ
@@ -44,11 +45,15 @@ let containerSp;
 
 // asset property
 const ASSET_BG = "images/pic_bg.jpg";
-const ASSET_OBJ = "images/pic_shine.png";
+const ASSET_obj_skyblue = "images/pic_shine_skyblue.png";
+const ASSET_obj_blue = "images/pic_shine_blue.png";
+const ASSET_obj_darkblue = "images/pic_shine_darkblue.png";
 
 // asset load
 PIXI.loader.add("bg_data", ASSET_BG);
-PIXI.loader.add("obj_data", ASSET_OBJ);
+PIXI.loader.add("obj_skyblue_data", ASSET_obj_skyblue);
+PIXI.loader.add("obj_blue_data", ASSET_obj_blue);
+PIXI.loader.add("obj_darkblue_data", ASSET_obj_darkblue);
 PIXI.loader.load(onAssetsLoaded);
 
 /**
@@ -66,7 +71,9 @@ function onAssetsLoaded(loader, res) {
   bg.y = 0;
 
   // shine
-  obj = res.obj_data.texture;
+  obj_skyblue = res.obj_skyblue_data.texture;
+  obj_blue = res.obj_blue_data.texture;
+  obj_darkblue = res.obj_darkblue_data.texture;
 
   // container
   app.stage.on("pointerdown", onPointerDown);
@@ -121,14 +128,10 @@ let onPointerDown = e => {
   console.log("onPointerDown()", e);
 
   position = e.data.global;
-  obj.x = position.x;
-  obj.y = position.y;
-
   makeParticle(
     position.x, // x position
     position.y, // y position
-    obj, // path for sprite asset
-    30, // number of particles
+    50, // number of particles
     -0.1, // gravity
     true, // random spacing
     0, // min angle
@@ -177,7 +180,6 @@ const update = delta => {
  * @export particleEffect
  * @param {number} [x=0] x position(default=0)
  * @param {number} [y=0] y position(default=0)
- * @param {string} [spriteFunction=() => circle(10, "red")] sprite texture(default=red circle)
  * @param {number} [numberOfParticles=10] Maximum number of particles(default=10)
  * @param {number} [gravity=0] gravity(default=0)
  * @param {boolean} [randomSpacing=true] Should particles be random? To be evenly spaced?(default=true)
@@ -197,7 +199,6 @@ const update = delta => {
 function makeParticle(
   x = 0, // x座標
   y = 0, // y座標
-  obj, // 生成するスプライトのテクスチャ画像を格納
   numberOfParticles = 10, // パーティクル最大個数
   gravity = 0, // 重力
   randomSpacing = true, // パーティクル間をランダムにするか（true）？しない（その場合等間隔にする）か？
@@ -266,8 +267,18 @@ function makeParticle(
     if (numberOfParticles <= particles.length) return;
 
     // パーティクル単体は、スプライト画像
-    particle = new PIXI.Sprite(obj);
+    let num = randomInt(0, 2);
+    console.log("num: ", num);
+    let obj = `obj_${colorAry[num]}`;
+    console.log(obj);
+
+    let particle = new PIXI.Sprite(eval(obj));
     containerSp.addChild(particle);
+
+    // blendMode
+    particle.blendMode = PIXI.BLEND_MODES.ADD;
+    // particle.blendMode = PIXI.BLEND_MODES.SCREEN;
+    // particle.blendMode = PIXI.BLEND_MODES.MULTIPLY;
 
     // xとyの位置を設定する(中間点を算出)
     particle.x = x + randomInt(-50, 50);
