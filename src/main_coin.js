@@ -22,8 +22,8 @@ const fpsDelta = 60 / APP_FPS;
 
 let elapsedTime = 0;
 let bg;
-let obj_skyblue, obj_blue, obj_darkblue;
-let colorAry = ["skyblue", "blue", "darkblue"];
+let obj_0, obj_1, obj_2, obj_3;
+let objAry = ["0", "1", "2", "3"];
 let particles = []; // 複数
 let particle; // 単体
 let particlesEmitflag = true; // 生成済みフラグ
@@ -44,16 +44,18 @@ app.stage.addChild(container);
 let containerSp;
 
 // asset property
-const ASSET_BG = "images/pic_bg.jpg";
-const ASSET_obj_skyblue = "images/pic_shine_skyblue.png";
-const ASSET_obj_blue = "images/pic_shine_blue.png";
-const ASSET_obj_darkblue = "images/pic_shine_darkblue.png";
+const ASSET_BG = "images/pic_bg_carpet.jpg";
+const ASSET_obj_0 = "images/pic_coin_0.png";
+const ASSET_obj_1 = "images/pic_coin_1.png";
+const ASSET_obj_2 = "images/pic_coin_2.png";
+const ASSET_obj_3 = "images/pic_coin_3.png";
 
 // asset load
 PIXI.loader.add("bg_data", ASSET_BG);
-PIXI.loader.add("obj_skyblue_data", ASSET_obj_skyblue);
-PIXI.loader.add("obj_blue_data", ASSET_obj_blue);
-PIXI.loader.add("obj_darkblue_data", ASSET_obj_darkblue);
+PIXI.loader.add("obj_0_data", ASSET_obj_0);
+PIXI.loader.add("obj_1_data", ASSET_obj_1);
+PIXI.loader.add("obj_2_data", ASSET_obj_2);
+PIXI.loader.add("obj_3_data", ASSET_obj_3);
 PIXI.loader.load(onAssetsLoaded);
 
 /**
@@ -70,16 +72,17 @@ function onAssetsLoaded(loader, res) {
   bg.x = 0;
   bg.y = 0;
 
-  // shine
-  obj_skyblue = res.obj_skyblue_data.texture;
-  obj_blue = res.obj_blue_data.texture;
-  obj_darkblue = res.obj_darkblue_data.texture;
+  // coin
+  obj_0 = res.obj_0_data.texture;
+  obj_1 = res.obj_1_data.texture;
+  obj_2 = res.obj_2_data.texture;
+  obj_3 = res.obj_3_data.texture;
 
   // container
   app.stage.on("pointerdown", onPointerDown);
 
   // Text
-  let text = new PIXI.Text("Particle Effect Test 'Shine'\n(PixiJS 4.8.9)", {
+  let text = new PIXI.Text("Particle Effect Test 'Coin'\n(PixiJS 4.8.9)", {
     fontFamily: "Arial",
     fontSize: 30,
     fill: 0xf0fff0,
@@ -99,10 +102,10 @@ function onAssetsLoaded(loader, res) {
   let text2 = new PIXI.Text("Click(Touch) the Stage", {
     fontFamily: "Arial",
     fontSize: 24,
-    fill: 0xff0033,
+    fill: 0xdc143c,
     align: "center",
     fontWeight: "bold",
-    stroke: "#000000",
+    stroke: "#ffffff",
     strokeThickness: 5,
     dropShadow: false,
     dropShadowColor: "#666666",
@@ -130,21 +133,21 @@ let onPointerDown = e => {
   makeParticle(
     position.x, // x position
     position.y, // y position
-    50, // number of particles
-    -0.1, // gravity
+    30, // number of particles
+    0.4, // gravity
     true, // random spacing
-    0, // min angle
-    6.28, // max angle
-    12, // min size
-    24, // max size
+    6.28, // min angle
+    0, // max angle
+    20, // min size
+    30, // max size
     1, // min speed
     2, // max speed
     0.005, // min scale speed
     0.01, // max scale speed
-    0.005, // min alpha speed
-    0.01, // max alpha speed
-    0.05, // min rotation speed
-    0.1 // max rotation speed
+    0.02, // min alpha speed
+    0.025, // max alpha speed
+    0.005, // min rotation speed
+    0.01 // max rotation speed
   );
 };
 
@@ -267,16 +270,14 @@ function makeParticle(
 
     // パーティクル単体は、スプライト画像
     let num = randomInt(0, 2);
-    let obj = Function(
-      '"use strict";return (' + `obj_${colorAry[num]}` + ")"
-    )();
+    let obj = Function('"use strict";return (' + `obj_${objAry[num]}` + ")")();
 
     let particle = new PIXI.Sprite(obj);
     containerSp.addChild(particle);
 
     // blendMode
-    // particle.blendMode = PIXI.BLEND_MODES.NORMAL;
-    particle.blendMode = PIXI.BLEND_MODES.ADD;
+    particle.blendMode = PIXI.BLEND_MODES.NORMAL;
+    // particle.blendMode = PIXI.BLEND_MODES.ADD;
     // particle.blendMode = PIXI.BLEND_MODES.SCREEN;
     // particle.blendMode = PIXI.BLEND_MODES.MULTIPLY;
 
