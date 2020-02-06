@@ -21,3 +21,11 @@ Customize "Chapter 8 Particle Effect" so that it can be used with pixijs.
 [https://pixijs.download/dev/docs/PIXI.html#.BLEND_MODES](https://pixijs.download/dev/docs/PIXI.html#.BLEND_MODES)  
 >IMPORTANT - The WebGL renderer only supports the NORMAL, ADD, MULTIPLY and SCREEN blend modes.  
 >Anything else will silently act like NORMAL.  
+
+**eval() - MDN - Mozilla**  
+[https://developer.mozilla.org/ja/docs/Web/JavaScript/Reference/Global_Objects/eval](https://developer.mozilla.org/ja/docs/Web/JavaScript/Reference/Global_Objects/eval)  
+>return Function('"use strict";return (' + obj + ')')();
+
+**＄（ドル）のマークの入ったメダルコインイラスト(Medal coin illustration with ＄ (dollar) mark)**  
+[http://www.medalbadge.net/data/154.php](http://www.medalbadge.net/data/154.php)  
+use coin asset
