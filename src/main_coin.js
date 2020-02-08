@@ -85,7 +85,7 @@ function onAssetsLoaded(loader, res) {
   let text = new PIXI.Text("Particle Effect Test 'Coin'\n(PixiJS 4.8.9)", {
     fontFamily: "Arial",
     fontSize: 30,
-    fill: 0xf0fff0,
+    fill: 0xffa500,
     align: "center",
     fontWeight: "bold",
     stroke: "#000000",
@@ -134,6 +134,7 @@ let onPointerDown = e => {
     position.x, // x position
     position.y, // y position
     30, // number of particles
+    60, // lifetime
     0.4, // gravity
     true, // random spacing
     6.28, // min angle
@@ -144,8 +145,10 @@ let onPointerDown = e => {
     2, // max speed
     0.005, // min scale speed
     0.01, // max scale speed
-    0.02, // min alpha speed
-    0.025, // max alpha speed
+    // 0.02, // min alpha speed
+    // 0.025, // max alpha speed
+    // 1.0, // min alpha speed
+    // 1.0, // max alpha speed
     0.005, // min rotation speed
     0.01 // max rotation speed
   );
@@ -183,6 +186,7 @@ const update = delta => {
  * @param {number} [x=0] x position(default=0)
  * @param {number} [y=0] y position(default=0)
  * @param {number} [numberOfParticles=10] Maximum number of particles(default=10)
+ * @param {number} [lifetime = 60] Particle lifetime
  * @param {number} [gravity=0] gravity(default=0)
  * @param {boolean} [randomSpacing=true] Should particles be random? To be evenly spaced?(default=true)
  * @param {number} [minAngle=0] Minimum angle(radian, default=0=→, 1.57=↓, 3.14=←, 4.712=↑, 6.28=→=0)
@@ -202,6 +206,7 @@ function makeParticle(
   x = 0, // x座標
   y = 0, // y座標
   numberOfParticles = 10, // パーティクル最大個数
+  lifetime = 60,
   gravity = 0, // 重力
   randomSpacing = true, // パーティクル間をランダムにするか（true）？しない（その場合等間隔にする）か？
   minAngle = 0, // 最小角度
@@ -302,6 +307,9 @@ function makeParticle(
     particle.vx = speed * Math.cos(angle); // 速度xは角度のコサインにランダム値を乗算した物
     particle.vy = speed * Math.sin(angle); // 速度yは角度のサインにランダム値を乗算した物
 
+    // ライフタイムの追加
+    particle.lifetime = lifetime;
+
     // パーティクルを「particles」配列にプッシュする
     // "particles"配列は、フレーム毎にゲームループによって更新する必要がある
     particles.push(particle);
@@ -359,9 +367,15 @@ function updateParticle() {
     // パーティクルのアルファを変更する
     p.alpha -= p.alphaSpeed;
 
+    // パーティクルのライフタイムを設定
+    p.lifetime -= 1;
+
     // 「アルファ」がゼロになったらパーティクルを削除する
     // ★考え方、lifetimeを設けてそれが0になったら削除（透過させない場合）するとか、★削除でなくてpoolに入れて再利用するとか
-    if (p.alpha <= 0) {
+    // if (p.alpha <= 0) {
+    //  removeParticle(p);
+    // }
+    if (p.lifetime <= 0) {
       removeParticle(p);
     }
   }
