@@ -4,6 +4,7 @@
 
 **DEMO**  
 [https://evofan.github.io/pixijs_particle_agd/](https://evofan.github.io/pixijs_particle_agd/)  
+[https://evofan.github.io/pixijs_particle_agd/index_coin.html](https://evofan.github.io/pixijs_particle_agd/index_coin.html)  
 
 reference  
 
