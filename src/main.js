@@ -24,10 +24,9 @@ let elapsedTime = 0;
 let bg;
 let obj_skyblue, obj_blue, obj_darkblue;
 let colorAry = ["skyblue", "blue", "darkblue"];
-let particles = []; // 複数
-let particle; // 単体
-let particlesEmitflag = true; // 生成済みフラグ
-let particleCount = 0; // 個数確認用
+let particles = [];
+let particle;
+let particlesEmitflag = true;
 
 let container = new PIXI.Container();
 container.width = 100;
@@ -196,27 +195,27 @@ const update = delta => {
  * @param {number} [maxRotationSpeed=0.03] Maximum rotation change speed(default=0.03)
  */
 function makeParticle(
-  x = 0, // x座標
-  y = 0, // y座標
-  numberOfParticles = 10, // パーティクル最大個数
-  gravity = 0, // 重力
-  randomSpacing = true, // パーティクル間をランダムにするか（true）？しない（その場合等間隔にする）か？
-  minAngle = 0, // 最小角度
-  maxAngle = 3.14, // 最大角度
-  minSize = 2, // 最小サイズ
-  maxSize = 10, // 最大サイズ
-  minSpeed = 0.2, // 最小スピード
-  maxSpeed = 1.5, // 最大スピード
-  minScaleSpeed = 0.05, // 最小スケール変化スピード
-  maxScaleSpeed = 0.1, // 最大スケール変化スピード
-  minAlphaSpeed = 0.1, // 最小アルファ変化スピード
-  maxAlphaSpeed = 0.2, // 最大アルファ変化スピード
-  minRotationSpeed = 0.02, // 最小回転変化スピード
-  maxRotationSpeed = 0.05 // 最大回転変化スピード
+  x = 0,
+  y = 0,
+  numberOfParticles = 10,
+  gravity = 0,
+  randomSpacing = true,
+  minAngle = 0,
+  maxAngle = 3.14,
+  minSize = 2,
+  maxSize = 10,
+  minSpeed = 0.2,
+  maxSpeed = 1.5,
+  minScaleSpeed = 0.05,
+  maxScaleSpeed = 0.1,
+  minAlphaSpeed = 0.1,
+  maxAlphaSpeed = 0.2,
+  minRotationSpeed = 0.02,
+  maxRotationSpeed = 0.05
 ) {
   console.log("makeParticle()");
   if (!particlesEmitflag) {
-    console.log("生成中なので抜け");
+    console.log("it is being generated ...");
     return;
   }
   particlesEmitflag = false;
@@ -224,40 +223,30 @@ function makeParticle(
   containerSp = new PIXI.Container();
   app.stage.addChild(containerSp);
 
-  // ランダム浮動小数点数とランダム整数のヘルパー関数
+  // helper function
   let randomFloat = (min, max) => min + Math.random() * (max - min);
   let randomInt = (min, max) =>
-    Math.floor(Math.random() * (max - min + 1)) + min; // 最大～最小間の数値を返す
+    Math.floor(Math.random() * (max - min + 1)) + min;
 
-  // 角度を保存する配列
   let angles = [];
-
-  // 現在のパーティクルの角度を保存する変数
   let angle;
-
-  // 各パーティクルを何ラジアン分離する必要があるかを把握する為の変数
   let spacing = (maxAngle - minAngle) / (numberOfParticles - 1);
 
-  // 各パーティクルの角度値を作成し、その値を「angles」配列に格納する
   for (let i = 0; i < numberOfParticles; i++) {
-    // 「randomSpacing」が「true」の場合、パーティクルに「minAngle」と「maxAngle」の間のどれかの角度値を指定する
     if (randomSpacing) {
       angle = randomFloat(minAngle, maxAngle);
       angles.push(angle);
-    }
-    //「randomSpacing」が「false」の場合、「minAngle」で始まり「maxAngle」で終わる各パーティクルを均等に配置する
-    else {
+    } else {
       if (angle === undefined) angle = minAngle;
       angles.push(angle);
       angle += spacing;
     }
   }
 
-  // 角度毎にパーティクルを作成する、★考え方：1つ1つの角度の値に対して、1個のパーティクルを作成する→それが集まって全体を構成する
   angles.forEach(angle => make(angle));
 
   /**
-   * 個別のパーティクルを作成する
+   * Create individual particles
    * @param {number} angle
    */
   function make(angle) {
@@ -265,7 +254,6 @@ function makeParticle(
 
     if (numberOfParticles <= particles.length) return;
 
-    // パーティクル単体は、スプライト画像
     let num = randomInt(0, 2);
     let obj = Function(
       '"use strict";return (' + `obj_${colorAry[num]}` + ")"
@@ -275,37 +263,29 @@ function makeParticle(
     containerSp.addChild(particle);
 
     // blendMode
-    // particle.blendMode = PIXI.BLEND_MODES.NORMAL;
-    particle.blendMode = PIXI.BLEND_MODES.ADD;
-    // particle.blendMode = PIXI.BLEND_MODES.SCREEN;
-    // particle.blendMode = PIXI.BLEND_MODES.MULTIPLY;
+    particle.blendMode = PIXI.BLEND_MODES.ADD; // NORMAL, SCREEN, MULTIPLY
 
-    // xとyの位置を設定する(中間点を算出)
-    particle.x = x + randomInt(-50, 50);
-    particle.y = y + randomInt(-50, 50);
+    let areaOffset = 25;
+    particle.x = x + randomInt(-areaOffset, areaOffset);
+    particle.y = y + randomInt(-areaOffset, areaOffset);
 
-    particle.gravity = gravity; // ここで渡しておく
+    particle.gravity = gravity;
 
-    // ランダムな幅と高さを設定する
-    let size = randomInt(minSize, maxSize); // 最小～最大間
+    let size = randomInt(minSize, maxSize);
     particle.width = size;
     particle.height = size;
 
-    // ランダムな速度を設定して、スケール、アルファ、回転を変更します
-    particle.scaleSpeed = randomFloat(minScaleSpeed, maxScaleSpeed); // 最小～最大間
-    particle.alphaSpeed = randomFloat(minAlphaSpeed, maxAlphaSpeed); // 最小～最大間
-    particle.rotationSpeed = randomFloat(minRotationSpeed, maxRotationSpeed); // 最小～最大間
+    particle.scaleSpeed = randomFloat(minScaleSpeed, maxScaleSpeed);
+    particle.alphaSpeed = randomFloat(minAlphaSpeed, maxAlphaSpeed);
+    particle.rotationSpeed = randomFloat(minRotationSpeed, maxRotationSpeed);
 
-    // パーティクルが移動するランダムな速度を設定します
-    let speed = randomFloat(minSpeed, maxSpeed); // 最小～最大間
-    particle.vx = speed * Math.cos(angle); // 速度xは角度のコサインにランダム値を乗算した物
-    particle.vy = speed * Math.sin(angle); // 速度yは角度のサインにランダム値を乗算した物
+    let speed = randomFloat(minSpeed, maxSpeed);
+    particle.vx = speed * Math.cos(angle);
+    particle.vy = speed * Math.sin(angle);
 
-    // パーティクルを「particles」配列にプッシュする
-    // "particles"配列は、フレーム毎にゲームループによって更新する必要がある
     particles.push(particle);
     console.log("particle: ", particle);
-    console.log("■ particles.length: ", particles.length);
+    console.log("particles.length: ", particles.length);
   }
 }
 
@@ -314,13 +294,10 @@ function removeParticle(...spritesToRemove) {
   spritesToRemove.forEach(sprite => this.removeChild(sprite));
 }
 
-// removeChild()メソッドを使用して配列からスプライトを削除する
 function removeChild(sprite) {
-  console.log("removeChild()");
   sprite = null;
   particles.splice(sprite);
-  console.log("リムーブ完了", particles.length);
-  console.log("■ particles.length: ", particles.length);
+  console.log("removed: ", particles.length);
   if (particles.length <= 0) {
     containerSp.destroy({ children: true, texture: false, baseTexture: false });
     app.stage.removeChild(containerSp);
@@ -328,23 +305,17 @@ function removeChild(sprite) {
   }
 }
 
-// （パーティクルの「update」メソッドは、ゲームループの各フレームで呼び出される）
 function updateParticle() {
   for (let i = 0; i <= particles.length; i++) {
-    // 重力を追加する、0なら変化無し
-
     let p = particles[i];
 
     if (p === undefined) break;
 
-    // 重力を追加
     p.vy += p.gravity;
 
-    // パーティクル移動する＝ベクトルを追加する
     p.x += p.vx;
     p.y += p.vy;
 
-    // パーティクルのスケールを変化させる
     if (p.scaleX - p.scaleSpeed > 0) {
       p.scaleX -= p.scaleSpeed;
     }
@@ -352,14 +323,10 @@ function updateParticle() {
       p.scaleY -= p.scaleSpeed;
     }
 
-    // パーティクルの回転を変更する
     p.rotation += p.rotationSpeed;
 
-    // パーティクルのアルファを変更する
     p.alpha -= p.alphaSpeed;
 
-    // 「アルファ」がゼロになったらパーティクルを削除する
-    // ★考え方、lifetimeを設けてそれが0になったら削除（透過させない場合）するとか、★削除でなくてpoolに入れて再利用するとか
     if (p.alpha <= 0) {
       removeParticle(p);
     }
