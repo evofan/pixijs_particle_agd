@@ -27,6 +27,7 @@ let objAry = ["0", "1", "2", "3"];
 let particles = [];
 let particle;
 let particlesEmitflag = true;
+let title;
 
 let container = new PIXI.Container();
 container.width = 100;
@@ -48,6 +49,7 @@ const ASSET_obj_0 = "images/pic_coin_0.png";
 const ASSET_obj_1 = "images/pic_coin_1.png";
 const ASSET_obj_2 = "images/pic_coin_2.png";
 const ASSET_obj_3 = "images/pic_coin_3.png";
+const ASSET_TITLE = "images/pic_ti_coins2.png";
 
 // asset load
 PIXI.loader.add("bg_data", ASSET_BG);
@@ -55,6 +57,7 @@ PIXI.loader.add("obj_0_data", ASSET_obj_0);
 PIXI.loader.add("obj_1_data", ASSET_obj_1);
 PIXI.loader.add("obj_2_data", ASSET_obj_2);
 PIXI.loader.add("obj_3_data", ASSET_obj_3);
+PIXI.loader.add("title_data", ASSET_TITLE);
 PIXI.loader.load(onAssetsLoaded);
 
 /**
@@ -70,6 +73,13 @@ function onAssetsLoaded(loader, res) {
   container.addChild(bg);
   bg.x = 0;
   bg.y = 0;
+
+  // TITLE
+  title = new PIXI.Sprite(res.title_data.texture);
+  container.addChild(title);
+  title.scale.x = title.scale.y = 0.75;
+  title.x = WIDTH / 2 - title.width / 2;
+  title.y = HEIGHT - title.height - 40;
 
   // coin
   obj_0 = res.obj_0_data.texture;
