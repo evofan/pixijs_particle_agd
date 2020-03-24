@@ -27,6 +27,7 @@ let colorAry = ["skyblue", "blue", "darkblue"];
 let particles = [];
 let particle;
 let particlesEmitflag = true;
+let title;
 
 let container = new PIXI.Container();
 container.width = 100;
@@ -47,12 +48,14 @@ const ASSET_BG = "images/pic_bg.jpg";
 const ASSET_obj_skyblue = "images/pic_shine_skyblue.png";
 const ASSET_obj_blue = "images/pic_shine_blue.png";
 const ASSET_obj_darkblue = "images/pic_shine_darkblue.png";
+const ASSET_TITLE = "images/pic_ti_f_light.png";
 
 // asset load
 PIXI.loader.add("bg_data", ASSET_BG);
 PIXI.loader.add("obj_skyblue_data", ASSET_obj_skyblue);
 PIXI.loader.add("obj_blue_data", ASSET_obj_blue);
 PIXI.loader.add("obj_darkblue_data", ASSET_obj_darkblue);
+PIXI.loader.add("title_data", ASSET_TITLE);
 PIXI.loader.load(onAssetsLoaded);
 
 /**
@@ -69,6 +72,13 @@ function onAssetsLoaded(loader, res) {
   bg.x = 0;
   bg.y = 0;
 
+  // TITLE
+  title = new PIXI.Sprite(res.title_data.texture);
+  container.addChild(title);
+  title.scale.x = title.scale.y = 0.75;
+  title.x = WIDTH / 2 - title.width / 2;
+  title.y = HEIGHT - title.height - 40;
+  
   // shine
   obj_skyblue = res.obj_skyblue_data.texture;
   obj_blue = res.obj_blue_data.texture;
