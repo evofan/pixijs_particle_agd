@@ -29,4 +29,8 @@ Customize "Chapter 8 Particle Effect" so that it can be used with pixijs.
 
 **＄（ドル）のマークの入ったメダルコインイラスト(Medal coin illustration with ＄ (dollar) mark)**  
 [http://www.medalbadge.net/data/154.php](http://www.medalbadge.net/data/154.php)  
-use coin asset
+use coin asset  
+
+**手書きフォントのページ**  
+[http://marusexijaxs.web.fc2.com/tegakifont.html](http://marusexijaxs.web.fc2.com/tegakifont.html)  
+use font
